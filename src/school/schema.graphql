@@ -1,0 +1,53 @@
+type User {
+  id: ID!
+  name: String!
+  lastName: String!
+  patronymic: String!
+  password: String!
+  email: String!
+  phoneNumber: String!
+  age: Int!
+  avatarUrl: String
+  dateOfCreation: String
+  userRate: Float!
+  classId: ID!
+}
+
+type Class {
+  id: ID!
+  number: Int!
+  letter: String!
+  classRate: Float!
+}
+
+input NewUser {
+  name: String
+  lastName: String
+  patronymic: String
+  password: String
+  email: String
+  phoneNumber: String
+  age: Int
+  avatarUrl: String
+  userRate: Float
+  classId: ID!
+}
+
+input NewClass {
+  number: Int!
+  letter: String!
+  classRate: Float!
+}
+
+type Query {
+  users: [User!]!
+  user(id: ID!): User
+
+  classes: [Class!]!
+  class(id: ID!): Class
+}
+
+type Mutation {
+  createUser(input: NewUser): User!
+  createClass(input: NewClass): Class!
+}
