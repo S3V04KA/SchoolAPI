@@ -8,6 +8,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class LoginUser {
+    login: string;
+    password: string;
+}
+
 export class NewUser {
     name?: Nullable<string>;
     lastName?: Nullable<string>;
@@ -18,6 +23,7 @@ export class NewUser {
     age?: Nullable<number>;
     avatarUrl?: Nullable<string>;
     userRate?: Nullable<number>;
+    role: string;
     classId: string;
 }
 
@@ -39,7 +45,17 @@ export class User {
     avatarUrl?: Nullable<string>;
     dateOfCreation?: Nullable<string>;
     userRate: number;
+    role: string;
     classId: string;
+}
+
+export class SecureUser {
+    id: string;
+    role: string;
+}
+
+export class Token {
+    token: string;
 }
 
 export class Class {
@@ -54,6 +70,8 @@ export abstract class IQuery {
 
     abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
 
+    abstract me(): SecureUser | Promise<SecureUser>;
+
     abstract classes(): Class[] | Promise<Class[]>;
 
     abstract class(id: string): Nullable<Class> | Promise<Nullable<Class>>;
@@ -63,6 +81,10 @@ export abstract class IMutation {
     abstract createUser(input?: Nullable<NewUser>): User | Promise<User>;
 
     abstract createClass(input?: Nullable<NewClass>): Class | Promise<Class>;
+
+    abstract registerUser(input?: Nullable<NewUser>): User | Promise<User>;
+
+    abstract loginUser(input?: Nullable<LoginUser>): Token | Promise<Token>;
 }
 
 type Nullable<T> = T | null;

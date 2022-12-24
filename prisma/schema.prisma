@@ -23,6 +23,7 @@ model User {
 	avatarUrl		String	@default("https://cdn-icons-png.flaticon.com/512/145/145968.png")
 	userRate		Float	@default(3)
 	password		String	@default("1234")
+  role        String	@default("USER")
 
   classId     Int @default(1)
 	class       Class @relation(fields: [classId], references: [id])

@@ -4,17 +4,21 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
 import { ApolloDriverConfig } from '@nestjs/apollo/dist/interfaces';
 import { ClassModule } from './class/class.module';
+import { AuthModule } from './auth/auth.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
+    AuthModule,
     UserModule,
     ClassModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       typePaths: ['./**/*.graphql'],
       driver: ApolloDriver,
       playground: true,
+      context: ({ req }) => ({ headers: req.headers }),
     }),
-    ClassModule,
+    TokenModule,
   ],
 })
 export class AppModule {}

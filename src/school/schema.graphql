@@ -10,7 +10,17 @@ type User {
   avatarUrl: String
   dateOfCreation: String
   userRate: Float!
+  role: String!
   classId: ID!
+}
+
+type SecureUser {
+  id: ID!
+  role: String!
+}
+
+type Token {
+  token: String!
 }
 
 type Class {
@@ -18,6 +28,11 @@ type Class {
   number: Int!
   letter: String!
   classRate: Float!
+}
+
+input LoginUser {
+  login: String!
+  password: String!
 }
 
 input NewUser {
@@ -30,6 +45,7 @@ input NewUser {
   age: Int
   avatarUrl: String
   userRate: Float
+  role: String!
   classId: ID!
 }
 
@@ -42,6 +58,7 @@ input NewClass {
 type Query {
   users: [User!]!
   user(id: ID!): User
+  me: SecureUser!
 
   classes: [Class!]!
   class(id: ID!): Class
@@ -50,4 +67,6 @@ type Query {
 type Mutation {
   createUser(input: NewUser): User!
   createClass(input: NewClass): Class!
+  registerUser(input: NewUser): User!
+  loginUser(input: LoginUser): Token!
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '@prisma/client';
 import { NewUser } from 'src/graphql';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,17 +16,26 @@ export class UserService {
     });
   }
 
+  async userByEmail(email: string): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+  }
+
   async users(): Promise<User[]> {
     return this.prisma.user.findMany({});
   }
 
   async createUser(input: NewUser): Promise<User> {
+    const hashedPassword = await bcrypt.hash(String(input.password), 5);
     return this.prisma.user.create({
       data: {
         dateOfCreation: new Date(),
         name: input.name,
         email: input.email,
-        password: input.password,
+        password: hashedPassword,
         age: input.age,
         avatarUrl: input.avatarUrl,
         classId: parseInt(input.classId),
@@ -33,6 +43,7 @@ export class UserService {
         lastName: input.lastName,
         patronymic: input.patronymic,
         userRate: input.userRate,
+        role: input.role,
       },
     });
   }
