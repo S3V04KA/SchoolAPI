@@ -33,6 +33,14 @@ export class NewClass {
     classRate: number;
 }
 
+export class NewComplex {
+    mo?: Nullable<number>;
+    tu?: Nullable<number>;
+    we?: Nullable<number>;
+    th?: Nullable<number>;
+    fr?: Nullable<number>;
+}
+
 export class User {
     id: string;
     name: string;
@@ -47,6 +55,7 @@ export class User {
     userRate: number;
     role: string;
     classId: string;
+    class?: Nullable<Class>;
 }
 
 export class SecureUser {
@@ -65,16 +74,25 @@ export class Class {
     classRate: number;
 }
 
+export class Complex {
+    id: string;
+    orders: number[];
+}
+
 export abstract class IQuery {
     abstract users(): User[] | Promise<User[]>;
 
     abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract me(): SecureUser | Promise<SecureUser>;
+    abstract me(): User | Promise<User>;
 
     abstract classes(): Class[] | Promise<Class[]>;
 
     abstract class(id: string): Nullable<Class> | Promise<Nullable<Class>>;
+
+    abstract myClass(): Class | Promise<Class>;
+
+    abstract validUser(): boolean | Promise<boolean>;
 }
 
 export abstract class IMutation {
@@ -85,6 +103,8 @@ export abstract class IMutation {
     abstract registerUser(input?: Nullable<NewUser>): User | Promise<User>;
 
     abstract loginUser(input?: Nullable<LoginUser>): Token | Promise<Token>;
+
+    abstract createComplex(input?: Nullable<NewComplex>): Complex | Promise<Complex>;
 }
 
 type Nullable<T> = T | null;

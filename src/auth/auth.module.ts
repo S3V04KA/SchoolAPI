@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthResolver } from './auth.resolver';
 import { JwtModule } from '@nestjs/jwt';
 import { TokenModule } from 'src/token/token.module';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   imports: [

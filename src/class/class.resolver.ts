@@ -1,6 +1,8 @@
-import { Resolver, Args, Query, Mutation } from '@nestjs/graphql';
+import { Resolver, Args, Query, Mutation, Context } from '@nestjs/graphql';
 import { ClassService } from './class.service';
-import { NewClass } from 'src/graphql';
+import { NewClass, SecureUser } from 'src/graphql';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Resolver('Class')
 export class ClassResolver {
@@ -16,8 +18,17 @@ export class ClassResolver {
     return this.classService.class(id);
   }
 
+  @UseGuards(new AuthGuard())
+  @Query('myClass')
+  async myClass(@Context('user') user: SecureUser) {
+    return await this.classService.myClass(user);
+  }
+
   @Mutation('createClass')
-  async createClass(@Args('input') args: NewClass) {
+  async createClass(
+    @Context('user') user: SecureUser,
+    @Args('input') args: NewClass,
+  ) {
     return this.classService.createClass(args);
   }
 }

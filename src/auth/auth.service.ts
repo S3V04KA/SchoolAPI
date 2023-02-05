@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { LoginUser, NewUser, Token } from 'src/graphql';
+import { LoginUser, NewUser, SecureUser, Token } from 'src/graphql';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { TokenService } from 'src/token/token.service';
@@ -38,5 +38,12 @@ export class AuthService {
     const token = await this.tokenService.createToken(existUser);
 
     return { token: token };
+  }
+
+  async validUser(input: SecureUser) {
+    const user = await this.userService.user(input.id);
+
+    if (user) return true;
+    return false;
   }
 }

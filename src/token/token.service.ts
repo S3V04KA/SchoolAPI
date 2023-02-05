@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import * as jwt from 'jsonwebtoken';
-import { SecureUser } from 'src/Types/userTypes';
 
 @Injectable()
 export class TokenService {

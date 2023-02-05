@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '@prisma/client';
 import { NewUser } from 'src/graphql';
@@ -9,9 +9,9 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async user(id: string): Promise<User | null> {
-    return this.prisma.user.findUnique({
+    return this.prisma.user.findFirst({
       where: {
-        id: parseInt(id),
+        id: Number(id) ? Number(id) : 0,
       },
     });
   }
@@ -26,6 +26,17 @@ export class UserService {
 
   async users(): Promise<User[]> {
     return this.prisma.user.findMany({});
+  }
+
+  async me(id: number): Promise<User> {
+    return this.prisma.user.findFirst({
+      where: {
+        id: id,
+      },
+      include: {
+        class: true,
+      },
+    });
   }
 
   async createUser(input: NewUser): Promise<User> {

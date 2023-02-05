@@ -26,11 +26,16 @@ export class UserResolver {
   @UseGuards(new AuthGuard())
   @Query('me')
   async me(@Context('user') user: SecureUser) {
-    return user;
+    return await this.userService.me(user.id);
   }
 
+  @UseGuards(new AuthGuard())
   @Mutation('createUser')
-  async createUser(@Args('input') args: NewUser) {
-    return await this.userService.createUser(args);
+  async createUser(
+    @Context('user') user: SecureUser,
+    @Args('input') args: NewUser,
+  ) {
+    if (user.role === 'ADMIN') return await this.userService.createUser(args);
+    return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 }

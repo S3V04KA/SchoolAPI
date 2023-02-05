@@ -6,6 +6,7 @@ import { ApolloDriverConfig } from '@nestjs/apollo/dist/interfaces';
 import { ClassModule } from './class/class.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
+import { ComplexModule } from './complex/complex.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TokenModule } from './token/token.module';
       context: ({ req }) => ({ headers: req.headers }),
     }),
     TokenModule,
+    ComplexModule,
   ],
 })
 export class AppModule {}

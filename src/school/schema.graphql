@@ -12,6 +12,7 @@ type User {
   userRate: Float!
   role: String!
   classId: ID!
+  class: Class
 }
 
 type SecureUser {
@@ -28,6 +29,11 @@ type Class {
   number: Int!
   letter: String!
   classRate: Float!
+}
+
+type Complex {
+  id: ID!
+  orders: [Int!]!
 }
 
 input LoginUser {
@@ -55,13 +61,24 @@ input NewClass {
   classRate: Float!
 }
 
+input NewComplex {
+  mo: Int
+  tu: Int
+  we: Int
+  th: Int
+  fr: Int
+}
+
 type Query {
   users: [User!]!
   user(id: ID!): User
-  me: SecureUser!
+  me: User!
 
   classes: [Class!]!
   class(id: ID!): Class
+  myClass: Class!
+
+  validUser: Boolean!
 }
 
 type Mutation {
@@ -69,4 +86,5 @@ type Mutation {
   createClass(input: NewClass): Class!
   registerUser(input: NewUser): User!
   loginUser(input: LoginUser): Token!
+  createComplex(input: NewComplex): Complex!
 }
