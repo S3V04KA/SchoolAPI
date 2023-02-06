@@ -77,6 +77,7 @@ export class Class {
 export class Complex {
     id: string;
     orders: number[];
+    dateOfCreation?: Nullable<string>;
 }
 
 export abstract class IQuery {
@@ -93,6 +94,8 @@ export abstract class IQuery {
     abstract myClass(): Class | Promise<Class>;
 
     abstract validUser(): boolean | Promise<boolean>;
+
+    abstract getComplexesByUserId(): Complex[] | Promise<Complex[]>;
 }
 
 export abstract class IMutation {

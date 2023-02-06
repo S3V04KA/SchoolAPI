@@ -34,6 +34,7 @@ type Class {
 type Complex {
   id: ID!
   orders: [Int!]!
+  dateOfCreation: String
 }
 
 input LoginUser {
@@ -79,6 +80,8 @@ type Query {
   myClass: Class!
 
   validUser: Boolean!
+
+  getComplexesByUserId: [Complex!]!
 }
 
 type Mutation {

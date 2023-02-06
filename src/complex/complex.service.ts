@@ -28,6 +28,7 @@ export class ComplexService {
       data: {
         orders: [complex.mo, complex.tu, complex.we, complex.th, complex.fr],
         userId: user.id,
+        dateOfCreation: new Date(),
       },
       include: {
         user: true,
@@ -48,5 +49,20 @@ export class ComplexService {
     });
 
     return complexCr;
+  }
+
+  async getConplexesByUser(userId: number): Promise<Complex[] | HttpException> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        complexes: true,
+      },
+    });
+
+    if (!user) return new HttpException('No user', HttpStatus.FORBIDDEN);
+
+    return user.complexes;
   }
 }

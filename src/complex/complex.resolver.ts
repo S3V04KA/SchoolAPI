@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ComplexService } from './complex.service';
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -18,5 +18,14 @@ export class ComplexResolver {
       return new HttpException('No user', HttpStatus.FORBIDDEN);
 
     return await this.complexService.create(Number(user.id), input);
+  }
+
+  @UseGuards(new AuthGuard())
+  @Query('getComplexesByUserId')
+  async getComplexesByUserId(@Context('user') user: SecureUser) {
+    if (user === null)
+      return new HttpException('No user', HttpStatus.FORBIDDEN);
+
+    return await this.complexService.getConplexesByUser(Number(user.id));
   }
 }
