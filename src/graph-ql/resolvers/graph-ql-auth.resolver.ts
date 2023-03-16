@@ -1,12 +1,11 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AuthService } from './auth.service';
-import { LoginUser, NewUser } from 'src/graphql';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from './auth.guard';
-import { SecureUser } from 'src/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthService } from 'src/auth/auth.service';
+import { NewUser, LoginUser, SecureUser } from 'src/graphql';
 
-@Resolver('Auth')
-export class AuthResolver {
+@Resolver()
+export class GraphQLAuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation('registerUser')

@@ -1,20 +1,15 @@
-# Base image
-FROM node:18
+# dev
+FROM node:18-alpine
+RUN apk add --no-cache tzdata
+ENV TZ Asia/Yekaterinburg
+ENV NODE_PATH /app/node_modules
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+COPY ./*.json ./
+COPY ./*.lock ./
+COPY ./.env ./
 
-# Install app dependencies
-RUN npm install
-
-# Bundle app source
-COPY . .
-
-# Creates a "dist" folder with the production build
-RUN npm run build
-
-# Start the server using the production build
-CMD [ "node", "dist/main.js" ]
+RUN npm install -g npm && npm install && yarn install
+#CMD npx prisma generate && npm run build &&  node ./dist/main.js
+CMD npx prisma generate && npx prisma db push && npm run start:dev

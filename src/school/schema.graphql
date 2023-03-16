@@ -17,7 +17,7 @@ type User {
 
 type SecureUser {
   id: ID!
-  role: String!
+  role: Role!
 }
 
 type Token {
@@ -37,6 +37,13 @@ type Complex {
   dateOfCreation: String
 }
 
+type Role {
+  id: ID!
+  role: String!
+
+  users: [User]
+}
+
 input LoginUser {
   login: String!
   password: String!
@@ -52,7 +59,7 @@ input NewUser {
   age: Int
   avatarUrl: String
   userRate: Float
-  role: String!
+  roleId: Int!
   classId: ID!
 }
 
@@ -63,11 +70,15 @@ input NewClass {
 }
 
 input NewComplex {
-  mo: Int
-  tu: Int
-  we: Int
-  th: Int
-  fr: Int
+  mo: Int!
+  tu: Int!
+  we: Int!
+  th: Int!
+  fr: Int!
+}
+
+input NewRole {
+  name: String!
 }
 
 type Query {
@@ -82,6 +93,8 @@ type Query {
   validUser: Boolean!
 
   getComplexesByUserId: [Complex!]!
+
+  role(id: ID!): Role!
 }
 
 type Mutation {
@@ -90,4 +103,5 @@ type Mutation {
   registerUser(input: NewUser): User!
   loginUser(input: LoginUser): Token!
   createComplex(input: NewComplex): Complex!
+  createRole(input: NewRole): Role!
 }

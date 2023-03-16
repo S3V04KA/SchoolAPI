@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { LoginUser, NewUser, SecureUser, Token } from 'src/graphql';
@@ -26,7 +25,7 @@ export class AuthService {
     input: LoginUser,
   ): Promise<User | null | BadRequestException | Token> {
     const existUser = await this.userService.userByEmail(input.login);
-    if (!existUser) return new BadRequestException('Wrong data');
+    if (!existUser) return new BadRequestException('Wrong data mail');
     const validatePassword = await bcrypt.compare(
       input.password,
       existUser.password,
@@ -41,7 +40,7 @@ export class AuthService {
   }
 
   async validUser(input: SecureUser) {
-    const user = await this.userService.user(input.id);
+    const user = await this.userService.user(Number(input.id));
 
     if (user) return true;
     return false;

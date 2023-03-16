@@ -7,6 +7,8 @@ import { ClassModule } from './class/class.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { ComplexModule } from './complex/complex.module';
+import { GraphQlModule } from './graph-ql/graph-ql.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -17,10 +19,12 @@ import { ComplexModule } from './complex/complex.module';
       typePaths: ['./**/*.graphql'],
       driver: ApolloDriver,
       playground: true,
-      context: ({ req }) => ({ headers: req.headers }),
+      context: ({ req }) => ({ headers: req.headers, mode: 'no-cors' }),
     }),
     TokenModule,
     ComplexModule,
+    GraphQlModule,
+    RolesModule,
   ],
 })
 export class AppModule {}

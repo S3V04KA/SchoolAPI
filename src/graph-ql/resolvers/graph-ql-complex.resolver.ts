@@ -1,11 +1,11 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ComplexService } from './complex.service';
-import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { UseGuards, HttpException, HttpStatus } from '@nestjs/common';
+import { Resolver, Mutation, Context, Args, Query } from '@nestjs/graphql';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { NewComplex, SecureUser } from 'src/graphql';
+import { ComplexService } from 'src/complex/complex.service';
+import { SecureUser, NewComplex } from 'src/graphql';
 
 @Resolver()
-export class ComplexResolver {
+export class GraphQLComplexResolver {
   constructor(private readonly complexService: ComplexService) {}
 
   @UseGuards(new AuthGuard())

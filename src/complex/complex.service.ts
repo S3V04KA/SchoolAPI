@@ -2,14 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Complex } from '@prisma/client';
 import { NewComplex } from 'src/graphql';
 import { PrismaService } from 'src/prisma.service';
-import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class ComplexService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(
     userId: number,

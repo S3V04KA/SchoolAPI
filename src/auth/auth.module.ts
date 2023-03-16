@@ -2,10 +2,8 @@ import { Module, forwardRef } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserModule } from 'src/user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { AuthResolver } from './auth.resolver';
 import { JwtModule } from '@nestjs/jwt';
 import { TokenModule } from 'src/token/token.module';
-import { AuthGuard } from './auth.guard';
 
 @Module({
   imports: [
@@ -20,6 +18,7 @@ import { AuthGuard } from './auth.guard';
       }),
     }),
   ],
-  providers: [AuthService, AuthResolver],
+  providers: [AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}

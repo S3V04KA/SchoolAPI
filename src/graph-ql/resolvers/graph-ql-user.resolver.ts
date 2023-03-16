@@ -1,32 +1,32 @@
+import { UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserService } from './user.service';
-import { NewUser } from 'src/graphql';
-import { SecureUser } from 'src/Types/userTypes';
-import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { SecureUser, NewUser } from 'src/graphql';
+import { UserService } from 'src/user/user.service';
 
-@Resolver('User')
-export class UserResolver {
+@Resolver()
+export class GraphQLUserResolver {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(new AuthGuard())
   @Query('users')
   async users(@Context('user') user: SecureUser) {
-    if (user.role === 'ADMIN') return await this.userService.users();
+    if (user.role.role === 'ADMIN') return await this.userService.users();
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 
   @UseGuards(new AuthGuard())
   @Query('user')
   async user(@Context('user') user: SecureUser, @Args('id') id: string) {
-    if (user.role === 'ADMIN') return await this.userService.user(id);
+    if (user.role.role === 'ADMIN')
+      return await this.userService.user(Number(id));
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 
   @UseGuards(new AuthGuard())
   @Query('me')
   async me(@Context('user') user: SecureUser) {
-    return await this.userService.me(user.id);
+    return await this.userService.me(Number(user.id));
   }
 
   @UseGuards(new AuthGuard())
@@ -35,7 +35,8 @@ export class UserResolver {
     @Context('user') user: SecureUser,
     @Args('input') args: NewUser,
   ) {
-    if (user.role === 'ADMIN') return await this.userService.createUser(args);
+    if (user.role.role === 'ADMIN')
+      return await this.userService.createUser(args);
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 }

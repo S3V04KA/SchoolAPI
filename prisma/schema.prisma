@@ -19,10 +19,22 @@ model User {
   avatarUrl      String    @default("https://cdn-icons-png.flaticon.com/512/145/145968.png")
   userRate       Float     @default(3)
   password       String    @default("1234")
-  role           String    @default("USER")
+
+  role           String
+  roleId         Int
+  roleObj        Role @relation(fields: [role, roleId], references: [role, id])
   classId        Int       @default(1)
   complexes      Complex[]
   class          Class     @relation(fields: [classId], references: [id])
+}
+
+model Role {
+  id        Int @id @default(autoincrement())
+  role      String
+
+  users     User[]
+
+  @@unique([role, id])
 }
 
 model Class {

@@ -23,7 +23,7 @@ export class NewUser {
     age?: Nullable<number>;
     avatarUrl?: Nullable<string>;
     userRate?: Nullable<number>;
-    role: string;
+    roleId: number;
     classId: string;
 }
 
@@ -34,11 +34,15 @@ export class NewClass {
 }
 
 export class NewComplex {
-    mo?: Nullable<number>;
-    tu?: Nullable<number>;
-    we?: Nullable<number>;
-    th?: Nullable<number>;
-    fr?: Nullable<number>;
+    mo: number;
+    tu: number;
+    we: number;
+    th: number;
+    fr: number;
+}
+
+export class NewRole {
+    name: string;
 }
 
 export class User {
@@ -60,7 +64,7 @@ export class User {
 
 export class SecureUser {
     id: string;
-    role: string;
+    role: Role;
 }
 
 export class Token {
@@ -80,6 +84,12 @@ export class Complex {
     dateOfCreation?: Nullable<string>;
 }
 
+export class Role {
+    id: string;
+    role: string;
+    users?: Nullable<Nullable<User>[]>;
+}
+
 export abstract class IQuery {
     abstract users(): User[] | Promise<User[]>;
 
@@ -96,6 +106,8 @@ export abstract class IQuery {
     abstract validUser(): boolean | Promise<boolean>;
 
     abstract getComplexesByUserId(): Complex[] | Promise<Complex[]>;
+
+    abstract role(id: string): Role | Promise<Role>;
 }
 
 export abstract class IMutation {
@@ -108,6 +120,8 @@ export abstract class IMutation {
     abstract loginUser(input?: Nullable<LoginUser>): Token | Promise<Token>;
 
     abstract createComplex(input?: Nullable<NewComplex>): Complex | Promise<Complex>;
+
+    abstract createRole(input?: Nullable<NewRole>): Role | Promise<Role>;
 }
 
 type Nullable<T> = T | null;
