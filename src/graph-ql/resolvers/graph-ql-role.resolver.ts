@@ -1,4 +1,6 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { NewRole } from 'src/graphql';
 import { RolesService } from 'src/roles/roles.service';
 
@@ -11,8 +13,10 @@ export class GraphQLRoleResolver {
     return await this.roleService.read(id);
   }
 
+  @UseGuards(new AuthGuard())
   @Mutation('createRole')
-  async createRole(@Args('input') input: NewRole) {
-    return await this.roleService.create(input);
+  async createRole(@Context('user') user, @Args('input') input: NewRole) {
+    if(user.role === "ADMIN") return await this.roleService.create(input);
+    return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 }

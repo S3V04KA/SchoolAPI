@@ -19,7 +19,7 @@ import { RolesModule } from './roles/roles.module';
       typePaths: ['./**/*.graphql'],
       driver: ApolloDriver,
       playground: true,
-      context: ({ req }) => ({ headers: req.headers, mode: 'no-cors' }),
+      context: ({ req }) => ({ headers: req.headers }),
     }),
     TokenModule,
     ComplexModule,

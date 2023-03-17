@@ -10,15 +10,15 @@ export class GraphQLUserResolver {
 
   @UseGuards(new AuthGuard())
   @Query('users')
-  async users(@Context('user') user: SecureUser) {
-    if (user.role.role === 'ADMIN') return await this.userService.users();
+  async users(@Context('user') user) {
+    if (user.role === 'ADMIN') return await this.userService.users();
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 
   @UseGuards(new AuthGuard())
   @Query('user')
-  async user(@Context('user') user: SecureUser, @Args('id') id: string) {
-    if (user.role.role === 'ADMIN')
+  async user(@Context('user') user, @Args('id') id: string) {
+    if (user.role === 'ADMIN')
       return await this.userService.user(Number(id));
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
@@ -38,10 +38,10 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Mutation('createUser')
   async createUser(
-    @Context('user') user: SecureUser,
+    @Context('user') user,
     @Args('input') args: NewUser,
   ) {
-    if (user.role.role === 'ADMIN')
+    if (user.role === 'ADMIN')
       return await this.userService.createUser(args);
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }

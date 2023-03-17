@@ -25,7 +25,7 @@ export class AuthService {
     input: LoginUser,
   ): Promise<User | null | BadRequestException | Token> {
     const existUser = await this.userService.userByEmail(input.login);
-    if (!existUser) return new BadRequestException('Wrong data mail');
+    if (!existUser) return new BadRequestException('Wrong data');
     const validatePassword = await bcrypt.compare(
       input.password,
       existUser.password,
