@@ -24,6 +24,12 @@ export class GraphQLUserResolver {
   }
 
   @UseGuards(new AuthGuard())
+  @Mutation('changePassword')
+  async changePassword(@Context('user') user: SecureUser, @Args('lastPass') lpass: string, @Args('newPass') npass: string){
+    return await this.userService.changePassword(Number(user.id), { lastPassword: lpass, newPassword: npass });
+  }
+
+  @UseGuards(new AuthGuard())
   @Query('me')
   async me(@Context('user') user: SecureUser) {
     return await this.userService.me(Number(user.id));

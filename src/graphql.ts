@@ -122,6 +122,8 @@ export abstract class IMutation {
     abstract createComplex(input?: Nullable<NewComplex>): Complex | Promise<Complex>;
 
     abstract createRole(input?: Nullable<NewRole>): Role | Promise<Role>;
+
+    abstract changePassword(lastPass?: Nullable<string>, newPass?: Nullable<string>): Nullable<string> | Promise<Nullable<string>>;
 }
 
 type Nullable<T> = T | null;

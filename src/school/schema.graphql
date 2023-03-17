@@ -104,4 +104,5 @@ type Mutation {
   loginUser(input: LoginUser): Token!
   createComplex(input: NewComplex): Complex!
   createRole(input: NewRole): Role!
+  changePassword(lastPass: String, newPass: String): String
 }

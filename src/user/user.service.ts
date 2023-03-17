@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 import { User } from '@prisma/client';
 import { NewUser } from 'src/graphql';
 import * as bcrypt from 'bcrypt';
+import passport from 'passport';
 
 @Injectable()
 export class UserService {
@@ -37,6 +38,34 @@ export class UserService {
         class: true,
       },
     });
+  }
+
+  async changePassword(id: number, input: {lastPassword: string, newPassword}): Promise<any> {
+    const user = await this.me(id);
+
+    if(!user)
+      return new HttpException('No User', HttpStatus.NOT_FOUND);
+
+    const validatePassword = await bcrypt.compare(input.lastPassword, user.password);
+
+    if(validatePassword){
+      const hashedPass = await bcrypt.hash(String(input.newPassword), 5);
+
+      const upUser = await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          password: hashedPass,
+        },
+      });
+
+      if(!upUser)
+        return new HttpException('User down', HttpStatus.CONFLICT)
+
+      return "Success";
+    }
+    return new HttpException("Wrong Password", HttpStatus.FORBIDDEN);
   }
 
   async createUser(input: NewUser): Promise<User | HttpException> {

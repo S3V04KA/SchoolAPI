@@ -12,4 +12,4 @@ COPY ./.env ./
 
 RUN npm install -g npm && npm install && yarn install
 #CMD npx prisma generate && npm run build &&  node ./dist/main.js
-CMD npx prisma generate && npx prisma db push && npm run start:dev
+CMD npx prisma generate && npm run start:dev
