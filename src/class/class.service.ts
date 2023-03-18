@@ -1,7 +1,7 @@
-import { HttpException, Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma.service";
-import { Class } from "@prisma/client";
-import { NewClass, SecureUser } from "src/graphql";
+import { HttpException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
+import { Class } from '@prisma/client';
+import { NewClass, SecureUser } from 'src/graphql';
 
 @Injectable()
 export class ClassService {
@@ -26,7 +26,7 @@ export class ClassService {
       },
     });
 
-    if (user === null) return new HttpException("User not found", 404);
+    if (user === null) return new HttpException('User not found', 404);
 
     const clas = await this.prisma.class.findFirst({
       where: {

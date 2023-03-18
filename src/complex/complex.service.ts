@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, RequestTimeoutException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Complex } from '@prisma/client';
 import { ComplexCallback, NewComplex } from 'src/graphql';
 import { PrismaService } from 'src/prisma.service';
@@ -70,25 +70,25 @@ export class ComplexService {
     return user.complexes.at(i);
   }
 
-  async canEditComplex(userId): Promise<boolean>{
+  async canEditComplex(userId): Promise<boolean> {
     const currentWeek = await this.getBackComplex(userId, -1);
     const newTime = new Date();
 
-    return (newTime.getTime() - currentWeek.dateOfCreation.getTime() < new Date(1000*60*60*8 + 1000*60*60*24*4).getTime())
+    return newTime.getTime() - currentWeek.dateOfCreation.getTime() < new Date(1000 * 60 * 60 * 8 + 1000 * 60 * 60 * 24 * 4).getTime();
   }
 
   async week(userId: number, input: NewComplex): Promise<ComplexCallback> {
     const currentWeek = await this.getBackComplex(userId, -1);
-    
-    if(!(await this.canEditComplex(userId)))
+
+    if (!(await this.canEditComplex(userId)))
       return {
         complex: {
           ...currentWeek,
-          dateOfCreation: currentWeek.dateOfCreation.getTime().toString()
+          dateOfCreation: currentWeek.dateOfCreation.getTime().toString(),
         },
         isCurrentWeek: true,
         isEditable: false,
-      }
+      };
 
     const complexUp = await this.prisma.complex.update({
       where: {
@@ -96,9 +96,9 @@ export class ComplexService {
       },
       data: {
         orders: [input.mo, input.tu, input.we, input.th, input.fr],
-        dateOfCreation: currentWeek.dateOfCreation
-      }
-    })
+        dateOfCreation: currentWeek.dateOfCreation,
+      },
+    });
 
     return {
       complex: {
@@ -107,7 +107,7 @@ export class ComplexService {
       },
       isCurrentWeek: true,
       isEditable: true,
-    }
+    };
   }
 
   async getComplex() {

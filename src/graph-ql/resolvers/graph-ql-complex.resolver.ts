@@ -37,13 +37,13 @@ export class GraphQLComplexResolver {
 
   @UseGuards(new AuthGuard())
   @Mutation('changeComplex')
-  async changeComplex(@Context('user') user: SecureUser, @Args('input') input: NewComplex){
+  async changeComplex(@Context('user') user: SecureUser, @Args('input') input: NewComplex) {
     return await this.complexService.week(user.id, input);
   }
 
   @UseGuards(new AuthGuard())
   @Query('getBackComplex')
-  async getBackComplex(@Context('user') user: SecureUser, i: number){
+  async getBackComplex(@Context('user') user: SecureUser, i: number) {
     return await this.complexService.getBackComplex(user.id, i);
   }
 }
