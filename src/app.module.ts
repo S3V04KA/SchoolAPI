@@ -18,6 +18,10 @@ import { GeneralResolversModule } from './general-resolvers/general-resolvers.mo
       driver: ApolloDriver,
       playground: true,
       context: ({ req }) => ({ headers: req.headers }),
+      cors: {
+        origin: 'http://178.47.46.58/',
+        credentials: true,
+      }
     }),
     AuthModule,
     UserModule,
