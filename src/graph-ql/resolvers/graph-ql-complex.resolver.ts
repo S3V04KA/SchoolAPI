@@ -10,12 +10,8 @@ export class GraphQLComplexResolver {
 
   @UseGuards(new AuthGuard())
   @Mutation('createComplex')
-  async createCompex(
-    @Context('user') user: SecureUser,
-    @Args('input') input: NewComplex,
-  ) {
-    if (user === null)
-      return new HttpException('No user', HttpStatus.FORBIDDEN);
+  async createCompex(@Context('user') user: SecureUser, @Args('input') input: NewComplex) {
+    if (user === null) return new HttpException('No user', HttpStatus.FORBIDDEN);
 
     return await this.complexService.create(Number(user.id), input);
   }
@@ -23,9 +19,31 @@ export class GraphQLComplexResolver {
   @UseGuards(new AuthGuard())
   @Query('getComplexesByUserId')
   async getComplexesByUserId(@Context('user') user: SecureUser) {
-    if (user === null)
-      return new HttpException('No user', HttpStatus.FORBIDDEN);
+    if (user === null) return new HttpException('No user', HttpStatus.FORBIDDEN);
 
-    return await this.complexService.getConplexesByUser(Number(user.id));
+    return await this.complexService.getComplexesByUser(Number(user.id));
+  }
+
+  @Query('complexesList')
+  async complexesList() {
+    return await this.complexService.getComplex();
+  }
+
+  @UseGuards(new AuthGuard())
+  @Query('canEditComplex')
+  async canEditComplex(@Context('user') user: SecureUser) {
+    return await this.complexService.canEditComplex(user.id);
+  }
+
+  @UseGuards(new AuthGuard())
+  @Mutation('changeComplex')
+  async changeComplex(@Context('user') user: SecureUser, @Args('input') input: NewComplex){
+    return await this.complexService.week(user.id, input);
+  }
+
+  @UseGuards(new AuthGuard())
+  @Query('getBackComplex')
+  async getBackComplex(@Context('user') user: SecureUser, i: number){
+    return await this.complexService.getBackComplex(user.id, i);
   }
 }

@@ -1,24 +1,19 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { Complex } from '@prisma/client';
-import { NewComplex } from 'src/graphql';
+import { ComplexCallback, NewComplex } from 'src/graphql';
 import { PrismaService } from 'src/prisma.service';
+import * as xlsx from 'xlsx';
 
 @Injectable()
 export class ComplexService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(
-    userId: number,
-    complex: NewComplex,
-  ): Promise<Complex | HttpException> {
+  async create(userId: number, complex: NewComplex): Promise<Complex> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
     });
-
-    if (user === null)
-      return new HttpException('No user', HttpStatus.FORBIDDEN);
 
     const complexCr = await this.prisma.complex.create({
       data: {
@@ -47,7 +42,7 @@ export class ComplexService {
     return complexCr;
   }
 
-  async getConplexesByUser(userId: number): Promise<Complex[] | HttpException> {
+  async getComplexesByUser(userId: number): Promise<Complex[] | HttpException> {
     const user = await this.prisma.user.findFirst({
       where: {
         id: userId,
@@ -60,5 +55,116 @@ export class ComplexService {
     if (!user) return new HttpException('No user', HttpStatus.FORBIDDEN);
 
     return user.complexes;
+  }
+
+  async getBackComplex(userId: number, i: number): Promise<Complex> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        complexes: true,
+      },
+    });
+
+    return user.complexes.at(i);
+  }
+
+  async canEditComplex(userId): Promise<boolean>{
+    const currentWeek = await this.getBackComplex(userId, -1);
+    const newTime = new Date();
+
+    return (newTime.getTime() - currentWeek.dateOfCreation.getTime() < new Date(1000*60*60*8 + 1000*60*60*24*4).getTime())
+  }
+
+  async week(userId: number, input: NewComplex): Promise<ComplexCallback> {
+    const currentWeek = await this.getBackComplex(userId, -1);
+    
+    if(!(await this.canEditComplex(userId)))
+      return {
+        complex: {
+          ...currentWeek,
+          dateOfCreation: currentWeek.dateOfCreation.getTime().toString()
+        },
+        isCurrentWeek: true,
+        isEditable: false,
+      }
+
+    const complexUp = await this.prisma.complex.update({
+      where: {
+        id: currentWeek.id,
+      },
+      data: {
+        orders: [input.mo, input.tu, input.we, input.th, input.fr],
+        dateOfCreation: currentWeek.dateOfCreation
+      }
+    })
+
+    return {
+      complex: {
+        ...complexUp,
+        dateOfCreation: complexUp.dateOfCreation.getTime().toString(),
+      },
+      isCurrentWeek: true,
+      isEditable: true,
+    }
+  }
+
+  async getComplex() {
+    const newBook = xlsx.utils.book_new();
+    newBook.Props = {
+      Author: 'МАОУ СОШ 215',
+      Language: 'RU',
+      CreatedDate: new Date(),
+      Title: 'Комлексное питание',
+    };
+
+    newBook.SheetNames.push('Питание');
+
+    const data = [['', 'Класс', 'Фамилия', 'Имя', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница']];
+
+    const users = await this.prisma.user.findMany({
+      include: {
+        complexes: true,
+      },
+    });
+
+    await users.forEach(async user => {
+      this.create(user.id, {
+        fr: 0,
+        mo: 0,
+        th: 0,
+        tu: 0,
+        we: 0,
+      });
+    });
+
+    const classes = await this.prisma.class.findMany({
+      include: {
+        Users: true,
+      },
+    });
+
+    await Promise.all(
+      classes.map(async c => {
+        await Promise.all(
+          c.Users.map(async (u, i) => {
+            data.push([
+              (i + 1).toString(),
+              c.number + c.letter,
+              u.lastName,
+              u.name,
+              ...(await this.getBackComplex(u.id, -1)).orders.map(v => (v === 0 ? 'Комплекс 1-й вариант' : 'Комплекс 2-й вариант')),
+            ]);
+          }),
+        );
+      }),
+    );
+
+    newBook.Sheets['Питание'] = await xlsx.utils.aoa_to_sheet(data);
+
+    await xlsx.writeFile(newBook, 'test.xlsx', {});
+
+    return 'Success';
   }
 }

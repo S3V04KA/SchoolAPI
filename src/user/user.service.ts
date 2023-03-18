@@ -1,9 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { User } from '@prisma/client';
-import { NewUser } from 'src/graphql';
-import * as bcrypt from 'bcrypt';
-import passport from 'passport';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { PrismaService } from "src/prisma.service";
+import { User } from "@prisma/client";
+import { NewUser } from "src/graphql";
+import * as bcrypt from "bcrypt";
+import passport from "passport";
 
 @Injectable()
 export class UserService {
@@ -40,15 +40,20 @@ export class UserService {
     });
   }
 
-  async changePassword(id: number, input: {lastPassword: string, newPassword}): Promise<any> {
+  async changePassword(
+    id: number,
+    input: { lastPassword: string; newPassword }
+  ): Promise<any> {
     const user = await this.me(id);
 
-    if(!user)
-      return new HttpException('No User', HttpStatus.NOT_FOUND);
+    if (!user) return new HttpException("No User", HttpStatus.NOT_FOUND);
 
-    const validatePassword = await bcrypt.compare(input.lastPassword, user.password);
+    const validatePassword = await bcrypt.compare(
+      input.lastPassword,
+      user.password
+    );
 
-    if(validatePassword){
+    if (validatePassword) {
       const hashedPass = await bcrypt.hash(String(input.newPassword), 5);
 
       const upUser = await this.prisma.user.update({
@@ -60,8 +65,7 @@ export class UserService {
         },
       });
 
-      if(!upUser)
-        return new HttpException('User down', HttpStatus.CONFLICT)
+      if (!upUser) return new HttpException("User down", HttpStatus.CONFLICT);
 
       return "Success";
     }
@@ -79,15 +83,15 @@ export class UserService {
 
     const clas = await this.prisma.class.findFirst({
       where: {
-        id: parseInt(input.classId),
+        id: input.classId,
       },
-    })
+    });
 
     if (!role) {
-      return new HttpException('No role', HttpStatus.NOT_FOUND);
+      return new HttpException("No role", HttpStatus.NOT_FOUND);
     }
     if (!clas) {
-      return new HttpException('No class', HttpStatus.NOT_FOUND);
+      return new HttpException("No class", HttpStatus.NOT_FOUND);
     }
 
     return this.prisma.user.create({
@@ -109,7 +113,7 @@ export class UserService {
         },
         class: {
           connect: {
-            id: parseInt(input.classId),
+            id: input.classId,
           },
         },
       },

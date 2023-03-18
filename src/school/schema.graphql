@@ -1,5 +1,5 @@
 type User {
-  id: ID!
+  id: Int!
   name: String!
   lastName: String!
   patronymic: String!
@@ -11,12 +11,12 @@ type User {
   dateOfCreation: String
   userRate: Float!
   role: String!
-  classId: ID!
+  classId: Int!
   class: Class
 }
 
 type SecureUser {
-  id: ID!
+  id: Int!
   role: Role!
 }
 
@@ -25,20 +25,26 @@ type Token {
 }
 
 type Class {
-  id: ID!
+  id: Int!
   number: Int!
   letter: String!
   classRate: Float!
 }
 
 type Complex {
-  id: ID!
+  id: Int!
   orders: [Int!]!
   dateOfCreation: String
 }
 
+type ComplexCallback {
+  isCurrentWeek: Boolean!
+  isEditable: Boolean!
+  complex: Complex!
+}
+
 type Role {
-  id: ID!
+  id: Int!
   role: String!
 
   users: [User]
@@ -60,7 +66,7 @@ input NewUser {
   avatarUrl: String
   userRate: Float
   roleId: Int!
-  classId: ID!
+  classId: Int!
 }
 
 input NewClass {
@@ -83,18 +89,24 @@ input NewRole {
 
 type Query {
   users: [User!]!
-  user(id: ID!): User
+  user(id: Int!): User
   me: User!
 
   classes: [Class!]!
-  class(id: ID!): Class
+  class(id: Int!): Class
   myClass: Class!
 
   validUser: Boolean!
 
   getComplexesByUserId: [Complex!]!
 
-  role(id: ID!): Role!
+  role(id: Int!): Role!
+
+  complexesList: String!
+
+  canEditComplex: Boolean!
+
+  getBackComplex(i: Int!): Complex!
 }
 
 type Mutation {
@@ -105,4 +117,5 @@ type Mutation {
   createComplex(input: NewComplex): Complex!
   createRole(input: NewRole): Role!
   changePassword(lastPass: String, newPass: String): String
+  changeComplex(input: NewComplex): ComplexCallback!
 }

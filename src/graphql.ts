@@ -24,7 +24,7 @@ export class NewUser {
     avatarUrl?: Nullable<string>;
     userRate?: Nullable<number>;
     roleId: number;
-    classId: string;
+    classId: number;
 }
 
 export class NewClass {
@@ -46,7 +46,7 @@ export class NewRole {
 }
 
 export class User {
-    id: string;
+    id: number;
     name: string;
     lastName: string;
     patronymic: string;
@@ -58,12 +58,12 @@ export class User {
     dateOfCreation?: Nullable<string>;
     userRate: number;
     role: string;
-    classId: string;
+    classId: number;
     class?: Nullable<Class>;
 }
 
 export class SecureUser {
-    id: string;
+    id: number;
     role: Role;
 }
 
@@ -72,20 +72,26 @@ export class Token {
 }
 
 export class Class {
-    id: string;
+    id: number;
     number: number;
     letter: string;
     classRate: number;
 }
 
 export class Complex {
-    id: string;
+    id: number;
     orders: number[];
     dateOfCreation?: Nullable<string>;
 }
 
+export class ComplexCallback {
+    isCurrentWeek: boolean;
+    isEditable: boolean;
+    complex: Complex;
+}
+
 export class Role {
-    id: string;
+    id: number;
     role: string;
     users?: Nullable<Nullable<User>[]>;
 }
@@ -93,13 +99,13 @@ export class Role {
 export abstract class IQuery {
     abstract users(): User[] | Promise<User[]>;
 
-    abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
+    abstract user(id: number): Nullable<User> | Promise<Nullable<User>>;
 
     abstract me(): User | Promise<User>;
 
     abstract classes(): Class[] | Promise<Class[]>;
 
-    abstract class(id: string): Nullable<Class> | Promise<Nullable<Class>>;
+    abstract class(id: number): Nullable<Class> | Promise<Nullable<Class>>;
 
     abstract myClass(): Class | Promise<Class>;
 
@@ -107,7 +113,13 @@ export abstract class IQuery {
 
     abstract getComplexesByUserId(): Complex[] | Promise<Complex[]>;
 
-    abstract role(id: string): Role | Promise<Role>;
+    abstract role(id: number): Role | Promise<Role>;
+
+    abstract complexesList(): string | Promise<string>;
+
+    abstract canEditComplex(): boolean | Promise<boolean>;
+
+    abstract getBackComplex(i: number): Complex | Promise<Complex>;
 }
 
 export abstract class IMutation {
@@ -124,6 +136,8 @@ export abstract class IMutation {
     abstract createRole(input?: Nullable<NewRole>): Role | Promise<Role>;
 
     abstract changePassword(lastPass?: Nullable<string>, newPass?: Nullable<string>): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract changeComplex(input?: Nullable<NewComplex>): ComplexCallback | Promise<ComplexCallback>;
 }
 
 type Nullable<T> = T | null;

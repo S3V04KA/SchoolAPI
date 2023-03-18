@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { TokenService } from './token.service';
-import { UserModule } from 'src/user/user.module';
+import { Module } from "@nestjs/common";
+import { TokenService } from "./token.service";
+import { UserModule } from "src/user/user.module";
 
 @Module({
   providers: [TokenService],
