@@ -23,8 +23,8 @@
   "dependencies": {
     "@apollo/gateway": "^2.2.2",
     "@nestjs/apollo": "^10.1.7",
-    "@nestjs/common": "^9.0.0",
-    "@nestjs/core": "^9.0.0",
+    "@nestjs/common": "^9.3.10",
+    "@nestjs/core": "^9.3.10",
     "@nestjs/graphql": "^10.1.7",
     "@nestjs/jwt": "^10.0.1",
     "@nestjs/passport": "^9.0.0",
@@ -39,7 +39,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
+    "rxjs": "^7.8.0",
     "tmp": "^0.2.1",
     "ts-morph": "^17.0.1",
     "xlsx": "^0.18.5"

@@ -17,7 +17,7 @@ import { GeneralResolversModule } from './general-resolvers/general-resolvers.mo
       typePaths: ['./**/*.graphql'],
       driver: ApolloDriver,
       playground: true,
-      context: ({ req }) => ({ headers: req.headers }),
+      context: ({ req, res }) => ({ headers: req.headers }),
     }),
     AuthModule,
     UserModule,
