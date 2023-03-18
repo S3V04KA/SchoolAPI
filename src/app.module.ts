@@ -19,7 +19,7 @@ import { GeneralResolversModule } from './general-resolvers/general-resolvers.mo
       playground: true,
       context: ({ req }) => ({ headers: req.headers }),
       cors: {
-        origin: 'http://178.47.46.58/',
+        origin: 'http://front/',
         credentials: true,
       }
     }),
