@@ -109,7 +109,40 @@ export class UserService {
             id: input.classId,
           },
         },
+        balance: input.balance,
       },
     });
+  }
+
+  async getBalance(id: number): Promise<number | HttpException> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if(user)
+      return user.balance;
+    return new HttpException('No User', HttpStatus.NOT_FOUND);
+  }
+
+  async setBalance(id: number, newBalance:number): Promise<number | HttpException>{
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if(user)
+      return (await this.prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          balance: newBalance,
+        }
+      })).balance
+
+      return new HttpException('No User', HttpStatus.NOT_FOUND);
   }
 }

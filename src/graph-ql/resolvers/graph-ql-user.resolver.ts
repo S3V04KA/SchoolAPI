@@ -43,4 +43,22 @@ export class GraphQLUserResolver {
     if (user.role === 'ADMIN') return await this.userService.createUser(args);
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
+
+  @Query('getBalanceById')
+  async getBalanceById(@Args('id') id: number) {
+    return await this.userService.getBalance(id);
+  }
+
+  @UseGuards(new AuthGuard())
+  @Query('getMyBalance')
+  async getMyBalance(@Context('user') user) {
+    return await this.userService.getBalance(user.id)
+  }
+
+  @UseGuards(new AuthGuard())
+  @Mutation('setBalance')
+  async setBalance(@Context('user') user, @Args('id') id: number, @Args('newBalance') newBalance: number){
+    if(user.role !== 'ADMIN') return new HttpException('No access', HttpStatus.FORBIDDEN);
+    return await this.userService.setBalance(id, newBalance)
+  }
 }

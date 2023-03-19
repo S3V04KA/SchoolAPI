@@ -10,6 +10,7 @@ type User {
   avatarUrl: String
   dateOfCreation: String
   userRate: Float!
+  balance: Float!
   role: String!
   classId: Int!
   class: Class
@@ -67,6 +68,7 @@ input NewUser {
   userRate: Float
   roleId: Int!
   classId: Int!
+  balance: Float!
 }
 
 input NewClass {
@@ -107,6 +109,9 @@ type Query {
   canEditComplex: Boolean!
 
   getBackComplex(i: Int!): Complex!
+
+  getBalanceById(id: Int): Float!
+  getMyBalance: Float!
 }
 
 type Mutation {
@@ -118,4 +123,5 @@ type Mutation {
   createRole(input: NewRole): Role!
   changePassword(lastPass: String, newPass: String): String
   changeComplex(input: NewComplex): ComplexCallback!
+  setBalance(id: Int, newBalance: Float): Float!
 }

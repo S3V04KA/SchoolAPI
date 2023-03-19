@@ -25,6 +25,7 @@ export class NewUser {
     userRate?: Nullable<number>;
     roleId: number;
     classId: number;
+    balance: number;
 }
 
 export class NewClass {
@@ -57,6 +58,7 @@ export class User {
     avatarUrl?: Nullable<string>;
     dateOfCreation?: Nullable<string>;
     userRate: number;
+    balance: number;
     role: string;
     classId: number;
     class?: Nullable<Class>;
@@ -120,6 +122,10 @@ export abstract class IQuery {
     abstract canEditComplex(): boolean | Promise<boolean>;
 
     abstract getBackComplex(i: number): Complex | Promise<Complex>;
+
+    abstract getBalanceById(id?: Nullable<number>): number | Promise<number>;
+
+    abstract getMyBalance(): number | Promise<number>;
 }
 
 export abstract class IMutation {
@@ -138,6 +144,8 @@ export abstract class IMutation {
     abstract changePassword(lastPass?: Nullable<string>, newPass?: Nullable<string>): Nullable<string> | Promise<Nullable<string>>;
 
     abstract changeComplex(input?: Nullable<NewComplex>): ComplexCallback | Promise<ComplexCallback>;
+
+    abstract setBalance(id?: Nullable<number>, newBalance?: Nullable<number>): number | Promise<number>;
 }
 
 type Nullable<T> = T | null;
