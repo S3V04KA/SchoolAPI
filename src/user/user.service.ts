@@ -24,6 +24,14 @@ export class UserService {
     });
   }
 
+  async usersByLogin(login: string): Promise<User[] | null> {
+    return this.prisma.user.findMany({
+      where: {
+        login: login,
+      }
+    })
+  }
+
   async users(): Promise<User[]> {
     return this.prisma.user.findMany({});
   }
@@ -110,6 +118,7 @@ export class UserService {
           },
         },
         balance: input.balance,
+        login: input.login
       },
     });
   }

@@ -26,6 +26,7 @@ export class NewUser {
     roleId: number;
     classId: number;
     balance: number;
+    login?: Nullable<string>;
 }
 
 export class NewClass {
@@ -62,6 +63,7 @@ export class User {
     role: string;
     classId: number;
     class?: Nullable<Class>;
+    login?: Nullable<string>;
 }
 
 export class SecureUser {

@@ -20,6 +20,7 @@ model User {
   userRate       Float     @default(3)
   password       String    @default("1234")
   balance        Float     @default(0.0)
+  login          String
 
   role           String
   roleId         Int

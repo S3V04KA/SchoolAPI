@@ -17,16 +17,23 @@ export class AuthService {
   }
 
   async loginUser(input: LoginUser): Promise<User | null | BadRequestException | Token> {
-    const existUser = await this.userService.userByEmail(input.login);
-    if (!existUser) return new BadRequestException('Wrong data');
-    const validatePassword = await bcrypt.compare(input.password, existUser.password);
-    if (!validatePassword) return new BadRequestException('Wrong data');
+    const existUsers = await this.userService.usersByLogin(input.login);
+    if (!existUsers) return new BadRequestException('Wrong data');
 
-    const { password, ...secureUser } = existUser;
+    const tok = await existUsers.map(async item => {
+      if (await bcrypt.compare(input.password, item.password)) {
+        const { password, ...secureUser } = item;
 
-    const token = await this.tokenService.createToken(existUser);
+        const token = await this.tokenService.createToken(secureUser);
 
-    return { token: token };
+        return { token: token };
+      }
+    })[0];
+
+    if(tok)
+      return tok
+
+    return new BadRequestException('Wrong data');
   }
 
   async validUser(input: SecureUser) {
