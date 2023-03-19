@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { LoginUser, NewUser, SecureUser, Token } from 'src/graphql';
 import { UserService } from 'src/user/user.service';
@@ -9,22 +9,21 @@ import { TokenService } from 'src/token/token.service';
 export class AuthService {
   constructor(private readonly userService: UserService, private readonly tokenService: TokenService) {}
 
-  async registerUser(input: NewUser): Promise<User | null | BadRequestException> {
+  async registerUser(input: NewUser): Promise<User | null | HttpException> {
     const existUser = await this.userService.userByEmail(input.email);
-    if (existUser) return new BadRequestException('User exists');
+    if (existUser) return new HttpException('User exists', HttpStatus.FORBIDDEN);
 
     return this.userService.createUser(input);
   }
 
-  async loginUser(input: LoginUser): Promise<User | null | BadRequestException | Token> {
+  async loginUser(input: LoginUser): Promise<User | null | HttpException | Token> {
     const existUsers = await this.userService.usersByLogin(input.login);
-    if (!existUsers) return new BadRequestException('Wrong data');
+    if (!existUsers) return new HttpException('Wrong Data', HttpStatus.FORBIDDEN);
 
     const tok = await existUsers.map(async item => {
       if (await bcrypt.compare(input.password, item.password)) {
-        const { password, ...secureUser } = item;
-
-        const token = await this.tokenService.createToken(secureUser);
+        item.password = ''
+        const token = await this.tokenService.createToken(item);
 
         return { token: token };
       }
@@ -33,7 +32,7 @@ export class AuthService {
     if(tok)
       return tok
 
-    return new BadRequestException('Wrong data');
+    return existUsers[0];
   }
 
   async validUser(input: SecureUser) {

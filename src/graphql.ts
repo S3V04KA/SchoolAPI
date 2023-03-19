@@ -137,7 +137,7 @@ export abstract class IMutation {
 
     abstract registerUser(input?: Nullable<NewUser>): User | Promise<User>;
 
-    abstract loginUser(input?: Nullable<LoginUser>): Token | Promise<Token>;
+    abstract loginUser(input?: Nullable<LoginUser>): User | Promise<User>;
 
     abstract createComplex(input?: Nullable<NewComplex>): Complex | Promise<Complex>;
 
