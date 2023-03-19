@@ -139,7 +139,7 @@ export abstract class IMutation {
 
     abstract loginUser(input?: Nullable<LoginUser>): Token | Promise<Token>;
 
-    abstract createComplex(input?: Nullable<NewComplex>, date?: Nullable<string>): Complex | Promise<Complex>;
+    abstract createComplex(id?: Nullable<number>, input?: Nullable<NewComplex>, date?: Nullable<string>): Complex | Promise<Complex>;
 
     abstract createRole(input?: Nullable<NewRole>): Role | Promise<Role>;
 
