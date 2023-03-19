@@ -136,7 +136,7 @@ export class ComplexService {
         th: 0,
         tu: 0,
         we: 0,
-      }, new Date("2023-03-17"));
+      }, null);
     });
 
     const classes = await this.prisma.class.findMany({
