@@ -10,10 +10,10 @@ export class GraphQLComplexResolver {
 
   @UseGuards(new AuthGuard())
   @Mutation('createComplex')
-  async createCompex(@Context('user') user: SecureUser, @Args('input') input: NewComplex) {
+  async createCompex(@Context('user') user: SecureUser, @Args('input') input: NewComplex, @Args('date') date: string) {
     if (user === null) return new HttpException('No user', HttpStatus.FORBIDDEN);
 
-    return await this.complexService.create(Number(user.id), input);
+    return await this.complexService.create(Number(user.id), input, date);
   }
 
   @UseGuards(new AuthGuard())

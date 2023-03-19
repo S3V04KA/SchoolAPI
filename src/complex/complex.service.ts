@@ -8,7 +8,7 @@ import * as xlsx from 'xlsx';
 export class ComplexService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: number, complex: NewComplex): Promise<Complex> {
+  async create(userId: number, complex: NewComplex, date): Promise<Complex> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -19,7 +19,7 @@ export class ComplexService {
       data: {
         orders: [complex.mo, complex.tu, complex.we, complex.th, complex.fr],
         userId: user.id,
-        dateOfCreation: new Date(),
+        dateOfCreation: date !== null ? new Date(date) : new Date(),
       },
       include: {
         user: true,
@@ -136,7 +136,7 @@ export class ComplexService {
         th: 0,
         tu: 0,
         we: 0,
-      });
+      }, null);
     });
 
     const classes = await this.prisma.class.findMany({

@@ -121,7 +121,7 @@ type Mutation {
   createClass(input: NewClass): Class!
   registerUser(input: NewUser): User!
   loginUser(input: LoginUser): Token!
-  createComplex(input: NewComplex): Complex!
+  createComplex(input: NewComplex, date: String): Complex!
   createRole(input: NewRole): Role!
   changePassword(lastPass: String, newPass: String): String
   changeComplex(input: NewComplex): ComplexCallback!
