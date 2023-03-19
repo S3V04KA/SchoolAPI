@@ -10,8 +10,8 @@ export class AuthService {
   constructor(private readonly userService: UserService, private readonly tokenService: TokenService) {}
 
   async registerUser(input: NewUser): Promise<User | null | HttpException> {
-    const existUser = await this.userService.userByEmail(input.email);
-    if (existUser) return new HttpException('User exists', HttpStatus.FORBIDDEN);
+    const existUsers = await this.userService.usersByLogin(input.login);
+    if (existUsers.length > 0) return new HttpException('User exists', HttpStatus.FORBIDDEN);
 
     return this.userService.createUser(input);
   }
@@ -32,7 +32,7 @@ export class AuthService {
     if(tok)
       return tok
 
-    return existUsers[0];
+    return new HttpException('Wrong Data p', HttpStatus.FORBIDDEN);
   }
 
   async validUser(input: SecureUser) {

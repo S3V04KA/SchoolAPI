@@ -120,7 +120,7 @@ type Mutation {
   createUser(input: NewUser): User!
   createClass(input: NewClass): Class!
   registerUser(input: NewUser): User!
-  loginUser(input: LoginUser): User!
+  loginUser(input: LoginUser): Token!
   createComplex(input: NewComplex): Complex!
   createRole(input: NewRole): Role!
   changePassword(lastPass: String, newPass: String): String
