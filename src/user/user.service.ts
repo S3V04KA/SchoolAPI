@@ -95,7 +95,7 @@ export class UserService {
       return new HttpException('No class', HttpStatus.NOT_FOUND);
     }
 
-    return this.prisma.user.create({
+    return await this.prisma.user.create({
       data: {
         dateOfCreation: new Date(),
         name: input.name,
