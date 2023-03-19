@@ -32,7 +32,7 @@ export class AuthService {
     if(tok)
       return tok
 
-    return new HttpException('Wrong Data p', HttpStatus.FORBIDDEN);
+    return new HttpException('Wrong Data', HttpStatus.FORBIDDEN);
   }
 
   async validUser(input: SecureUser) {
