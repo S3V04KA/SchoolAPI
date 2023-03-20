@@ -135,17 +135,21 @@ export class ComplexService {
       },
     });
 
-    await users.forEach(async user => {
-      this.create(user.id, {
-        fr: 0,
-        mo: 0,
-        th: 0,
-        tu: 0,
-        we: 0,
-      }, null);
-    });
+    // await users.forEach(async user => {
+    //   this.create(user.id, {
+    //     fr: 0,
+    //     mo: 0,
+    //     th: 0,
+    //     tu: 0,
+    //     we: 0,
+    //   }, null);
+    // });
 
     const classes = await this.prisma.class.findMany({
+      where: {
+        letter: { in: ['А','Б','В'] },
+        number: { in: [10,11] }
+      },
       include: {
         Users: true,
       },
@@ -160,10 +164,11 @@ export class ComplexService {
               c.number + c.letter,
               u.lastName,
               u.name,
-              ...(await this.getBackComplex(u.id, -1)).orders.map(v => (v === 0 ? 'Комплекс 1-й вариант' : 'Комплекс 2-й вариант')),
+              ...(await this.getBackComplex(u.id, -2)).orders.map(v => (v === 0 ? 'Комплекс 1-й вариант' : 'Комплекс 2-й вариант')),
             ]);
           }),
         );
+        data.push(['', '', '', '', '', '', '', '', ''])
       }),
     );
 
