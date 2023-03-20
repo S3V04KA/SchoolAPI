@@ -135,15 +135,15 @@ export class ComplexService {
       },
     });
 
-    // await users.forEach(async user => {
-    //   this.create(user.id, {
-    //     fr: 0,
-    //     mo: 0,
-    //     th: 0,
-    //     tu: 0,
-    //     we: 0,
-    //   }, null);
-    // });
+    await users.forEach(async user => {
+      this.create(user.id, {
+        fr: 0,
+        mo: 0,
+        th: 0,
+        tu: 0,
+        we: 0,
+      }, null);
+    });
 
     const classes = await this.prisma.class.findMany({
       where: {
