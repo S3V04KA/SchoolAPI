@@ -124,6 +124,12 @@ export class ComplexService {
     const data = [['', 'Класс', 'Фамилия', 'Имя', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница']];
 
     const users = await this.prisma.user.findMany({
+      where: {
+        class: {
+          number: { in: [11, 10] },
+          letter: { in: ['А', 'Б', 'В'] }
+        }
+      },
       include: {
         complexes: true,
       },
