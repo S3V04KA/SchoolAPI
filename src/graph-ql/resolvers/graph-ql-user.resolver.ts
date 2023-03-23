@@ -34,7 +34,7 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Query('me')
   async me(@Context('user') user: SecureUser) {
-    if(user.id != null) return new HttpException('XUi', HttpStatus.NOT_FOUND)
+    if(user.id == null) return new HttpException('XUi', HttpStatus.NOT_FOUND)
     return await this.userService.me(Number(user.id));
   }
 
