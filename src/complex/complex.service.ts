@@ -110,7 +110,7 @@ export class ComplexService {
     };
   }
 
-  async getComplex() {
+  async getActual() {
     const newBook = xlsx.utils.book_new();
     newBook.Props = {
       Author: 'МАОУ СОШ 215',
@@ -122,28 +122,6 @@ export class ComplexService {
     newBook.SheetNames.push('Питание');
 
     const data = [['', 'Класс', 'Фамилия', 'Имя', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница']];
-
-    const users = await this.prisma.user.findMany({
-      where: {
-        class: {
-          number: { in: [11, 10] },
-          letter: { in: ['А', 'Б', 'В'] }
-        }
-      },
-      include: {
-        complexes: true,
-      },
-    });
-
-    await users.forEach(async user => {
-      this.create(user.id, {
-        fr: 0,
-        mo: 0,
-        th: 0,
-        tu: 0,
-        we: 0,
-      }, null);
-    });
 
     const classes = await this.prisma.class.findMany({
       where: {
@@ -177,5 +155,31 @@ export class ComplexService {
     await xlsx.writeFile(newBook, 'test.xlsx', {});
 
     return 'Success';
+  }
+
+  async getComplex() {
+    const users = await this.prisma.user.findMany({
+      where: {
+        class: {
+          number: { in: [11, 10] },
+          letter: { in: ['А', 'Б', 'В'] }
+        }
+      },
+      include: {
+        complexes: true,
+      },
+    });
+
+    await users.forEach(async user => {
+      this.create(user.id, {
+        fr: 0,
+        mo: 0,
+        th: 0,
+        tu: 0,
+        we: 0,
+      }, null);
+    });
+
+    return await this.getActual();
   }
 }

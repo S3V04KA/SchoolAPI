@@ -46,4 +46,10 @@ export class GraphQLComplexResolver {
   async getBackComplex(@Context('user') user: SecureUser, @Args('i') i: number) {
     return await this.complexService.getBackComplex(user.id, i);
   }
+
+  @UseGuards(new AuthGuard())
+  @Query('getActualComplex')
+  async getActualComplex(@Context('user') user: SecureUser) {
+    return await this.complexService.getActual();
+  }
 }

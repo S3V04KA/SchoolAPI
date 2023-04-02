@@ -22,4 +22,19 @@ export class GeneralResolversController {
     });
     return new StreamableFile(file);
   }
+
+  @Get('/get_current')
+  getCurrent(@Res({ passthrough: true }) res) {
+    this.cService.getActual();
+
+    const file = createReadStream('./test.xlsx');
+    file.addListener('end', () => {
+      //res.status(200).send('Загрузка началась')
+    });
+    res.set({
+      'Content-Type': 'application/xlsx',
+      'Content-Disposition': 'attachment; filename="table.xlsx',
+    });
+    return new StreamableFile(file);
+  }
 }

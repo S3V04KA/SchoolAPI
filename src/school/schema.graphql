@@ -114,6 +114,7 @@ type Query {
 
   getBalanceById(id: Int): Float!
   getMyBalance: Float!
+  getActualComplex: String!
 }
 
 type Mutation {
