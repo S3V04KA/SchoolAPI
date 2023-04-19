@@ -23,7 +23,7 @@ export class AuthService {
     const tok = await existUsers.map(async item => {
       if (await bcrypt.compare(input.password, item.password)) {
         item.password = ''
-        const token = await this.tokenService.createToken(item);
+        const token = await this.tokenService.createToken({id: item.id, role: item.role});
 
         return { token: token };
       }

@@ -68,7 +68,7 @@ export class User {
 
 export class SecureUser {
     id: number;
-    role: Role;
+    role: string;
 }
 
 export class Token {
@@ -128,6 +128,8 @@ export abstract class IQuery {
     abstract getBalanceById(id?: Nullable<number>): number | Promise<number>;
 
     abstract getMyBalance(): number | Promise<number>;
+
+    abstract getActualComplex(): string | Promise<string>;
 }
 
 export abstract class IMutation {
@@ -148,6 +150,8 @@ export abstract class IMutation {
     abstract changeComplex(input?: Nullable<NewComplex>): ComplexCallback | Promise<ComplexCallback>;
 
     abstract setBalance(id?: Nullable<number>, newBalance?: Nullable<number>): number | Promise<number>;
+
+    abstract changePasswordAdmin(lastPass?: Nullable<string>, newPass?: Nullable<string>, userId?: Nullable<number>): Nullable<string> | Promise<Nullable<string>>;
 }
 
 type Nullable<T> = T | null;

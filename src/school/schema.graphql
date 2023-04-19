@@ -127,4 +127,5 @@ type Mutation {
   changePassword(lastPass: String, newPass: String): String
   changeComplex(input: NewComplex): ComplexCallback!
   setBalance(id: Int, newBalance: Float): Float!
+  changePasswordAdmin(lastPass: String, newPass: String, userId: Int): String
 }

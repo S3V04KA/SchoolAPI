@@ -80,7 +80,7 @@ export class ComplexService {
   async week(userId: number, input: NewComplex): Promise<ComplexCallback> {
     const currentWeek = await this.getBackComplex(userId, -1);
 
-    if (!(await this.canEditComplex(userId)))
+    if ((await this.canEditComplex(userId)))
       return {
         complex: {
           ...currentWeek,
@@ -110,7 +110,7 @@ export class ComplexService {
     };
   }
 
-  async getActual() {
+  async getActual(iter) {
     const newBook = xlsx.utils.book_new();
     newBook.Props = {
       Author: 'МАОУ СОШ 215',
@@ -142,7 +142,7 @@ export class ComplexService {
               c.number + c.letter,
               u.lastName,
               u.name,
-              ...(await this.getBackComplex(u.id, -2)).orders.map(v => (v === 0 ? 'Комплекс 1-й вариант' : 'Комплекс 2-й вариант')),
+              ...(await this.getBackComplex(u.id, iter)).orders.map(v => (v === 0 ? 'Комплекс 1-й вариант' : 'Комплекс 2-й вариант')),
             ]);
           }),
         );
@@ -180,6 +180,6 @@ export class ComplexService {
       }, null);
     });
 
-    return await this.getActual();
+    return await this.getActual(-2);
   }
 }

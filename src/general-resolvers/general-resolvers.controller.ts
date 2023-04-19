@@ -14,7 +14,7 @@ export class GeneralResolversController {
 
     const file = createReadStream('./test.xlsx');
     file.addListener('end', () => {
-      //res.status(200).send('Загрузка началась')
+      // res.status(200).send('Загрузка началась')
     });
     res.set({
       'Content-Type': 'application/xlsx',
@@ -23,18 +23,18 @@ export class GeneralResolversController {
     return new StreamableFile(file);
   }
 
-  @Get('/get_current')
+  @Get('/get-current')
   getCurrent(@Res({ passthrough: true }) res) {
-    this.cService.getActual();
-
-    const file = createReadStream('./test.xlsx');
-    file.addListener('end', () => {
-      //res.status(200).send('Загрузка началась')
+    return this.cService.getActual(-1).then(() => {
+      const file = createReadStream('./test.xlsx');
+      file.addListener('end', () => {
+        // res.status(200).send('Загрузка началась')
+      });
+      res.set({
+        'Content-Type': 'application/xlsx',
+        'Content-Disposition': 'attachment; filename="table.xlsx',
+      });
+      return new StreamableFile(file);
     });
-    res.set({
-      'Content-Type': 'application/xlsx',
-      'Content-Disposition': 'attachment; filename="table.xlsx',
-    });
-    return new StreamableFile(file);
   }
 }

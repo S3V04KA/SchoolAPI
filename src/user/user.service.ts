@@ -47,14 +47,14 @@ export class UserService {
     });
   }
 
-  async changePassword(id: number, input: { lastPassword: string; newPassword }): Promise<any> {
+  async changePassword(id: number, input: { lastPassword: string; newPassword }, isAdmin: boolean): Promise<any> {
     const user = await this.me(id);
 
     if (!user) return new HttpException('No User', HttpStatus.NOT_FOUND);
 
     const validatePassword = await bcrypt.compare(input.lastPassword, user.password);
 
-    if (validatePassword) {
+    if (validatePassword || isAdmin) {
       const hashedPass = await bcrypt.hash(String(input.newPassword), 5);
 
       const upUser = await this.prisma.user.update({

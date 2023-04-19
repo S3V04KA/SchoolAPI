@@ -25,16 +25,36 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Mutation('changePassword')
   async changePassword(@Context('user') user: SecureUser, @Args('lastPass') lpass: string, @Args('newPass') npass: string) {
-    return await this.userService.changePassword(Number(user.id), {
-      lastPassword: lpass,
-      newPassword: npass,
-    });
+    return await this.userService.changePassword(
+      Number(user.id),
+      {
+        lastPassword: lpass,
+        newPassword: npass,
+      },
+      false,
+    );
+  }
+
+  @UseGuards(new AuthGuard())
+  @Mutation('changePasswordAdmin')
+  async changePasswordAdmin(@Context('user') user: SecureUser, @Args('lastPass') lpass: string, @Args('newPass') npass: string, @Args('userId') userId: number) {
+    console.log(user.role)
+    if (user.role === 'ADMIN')
+      return await this.userService.changePassword(
+        userId,
+        {
+          lastPassword: lpass,
+          newPassword: npass,
+        },
+        true,
+      );
+    return new HttpException('No Access', HttpStatus.FORBIDDEN);
   }
 
   @UseGuards(new AuthGuard())
   @Query('me')
   async me(@Context('user') user: SecureUser) {
-    if(user.id == null) return new HttpException('no auth', HttpStatus.FORBIDDEN)
+    if (user.id == null) return new HttpException('no auth', HttpStatus.FORBIDDEN);
     return await this.userService.me(Number(user.id));
   }
 
@@ -53,13 +73,13 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Query('getMyBalance')
   async getMyBalance(@Context('user') user) {
-    return await this.userService.getBalance(user.id)
+    return await this.userService.getBalance(user.id);
   }
 
   @UseGuards(new AuthGuard())
   @Mutation('setBalance')
-  async setBalance(@Context('user') user, @Args('id') id: number, @Args('newBalance') newBalance: number){
-    if(user.role !== 'ADMIN') return new HttpException('No access', HttpStatus.FORBIDDEN);
-    return await this.userService.setBalance(id, newBalance)
+  async setBalance(@Context('user') user, @Args('id') id: number, @Args('newBalance') newBalance: number) {
+    if (user.role !== 'ADMIN') return new HttpException('No access', HttpStatus.FORBIDDEN);
+    return await this.userService.setBalance(id, newBalance);
   }
 }

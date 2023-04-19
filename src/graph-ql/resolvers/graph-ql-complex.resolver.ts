@@ -50,6 +50,6 @@ export class GraphQLComplexResolver {
   @UseGuards(new AuthGuard())
   @Query('getActualComplex')
   async getActualComplex(@Context('user') user: SecureUser) {
-    return await this.complexService.getActual();
+    return await this.complexService.getActual(-1);
   }
 }
