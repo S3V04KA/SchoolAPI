@@ -54,3 +54,32 @@ model Complex {
   userId Int
   user   User  @relation(fields: [userId], references: [id])
 }
+
+model Product {
+  id Int @id @default(autoincrement())
+  photoUrl String
+  categorys Category[]
+  name String
+  weight Float
+  price Float
+  isComplex Boolean
+  hiden Boolean
+  calories Int
+  fats Int
+  carbohydrates Int
+  proteins Int
+
+  complexModels ComplexModel[]
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  products Product[]
+}
+
+model ComplexModel {
+  id Int @id @default(autoincrement())
+  hide Boolean
+  products Product[]
+}
