@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { NewRole } from 'src/graphql';
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class RolesService {
     });
   }
 
-  async read(input: number): Promise<Role> {
+  async read(input: number): Promise<Role & { users: User[] }> {
     return this.prisma.role.findFirst({
       where: {
         id: input,

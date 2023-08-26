@@ -11,14 +11,14 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Query('users')
   async users(@Context('user') user) {
-    if (user.role === 'ADMIN') return await this.userService.users();
+    if (user.role.role === 'Admin') return await this.userService.users();
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 
   @UseGuards(new AuthGuard())
   @Query('user')
   async user(@Context('user') user, @Args('id') id: string) {
-    if (user.role === 'ADMIN') return await this.userService.user(Number(id));
+    if (user.role.role === 'Admin') return await this.userService.user(Number(id));
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 
@@ -38,8 +38,8 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Mutation('changePasswordAdmin')
   async changePasswordAdmin(@Context('user') user: SecureUser, @Args('lastPass') lpass: string, @Args('newPass') npass: string, @Args('userId') userId: number) {
-    console.log(user.role)
-    if (user.role === 'ADMIN')
+    console.log(user.role.role);
+    if (user.role.role === 'Admin')
       return await this.userService.changePassword(
         userId,
         {
@@ -61,7 +61,7 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Mutation('createUser')
   async createUser(@Context('user') user, @Args('input') args: NewUser) {
-    if (user.role === 'ADMIN') return await this.userService.createUser(args);
+    if (user.role.role === 'Admin') return await this.userService.createUser(args);
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
 
@@ -79,7 +79,7 @@ export class GraphQLUserResolver {
   @UseGuards(new AuthGuard())
   @Mutation('setBalance')
   async setBalance(@Context('user') user, @Args('id') id: number, @Args('newBalance') newBalance: number) {
-    if (user.role !== 'ADMIN') return new HttpException('No access', HttpStatus.FORBIDDEN);
+    if (user.role.role !== 'Admin') return new HttpException('No access', HttpStatus.FORBIDDEN);
     return await this.userService.setBalance(id, newBalance);
   }
 }

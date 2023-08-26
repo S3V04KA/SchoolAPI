@@ -16,7 +16,12 @@ export class GraphQLRoleResolver {
   @UseGuards(new AuthGuard())
   @Mutation('createRole')
   async createRole(@Context('user') user, @Args('input') input: NewRole) {
-    if (user.role === 'ADMIN') return await this.roleService.create(input);
+    if (user.role.role === 'Admin') return await this.roleService.create(input);
     return new HttpException('No access', HttpStatus.FORBIDDEN);
   }
+
+  // @Mutation('createRole')
+  // async createRole(@Args('input') input: NewRole) {
+  //   return await this.roleService.create(input);
+  // }
 }

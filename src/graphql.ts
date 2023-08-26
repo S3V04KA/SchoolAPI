@@ -1,4 +1,3 @@
-
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -68,7 +67,7 @@ export class User {
 
 export class SecureUser {
     id: number;
-    role: string;
+    role: Role;
 }
 
 export class Token {

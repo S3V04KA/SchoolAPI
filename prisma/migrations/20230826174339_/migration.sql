@@ -11,10 +11,8 @@ CREATE TABLE "User" (
     "avatarUrl" TEXT NOT NULL DEFAULT 'https://cdn-icons-png.flaticon.com/512/145/145968.png',
     "userRate" DOUBLE PRECISION NOT NULL DEFAULT 3,
     "password" TEXT NOT NULL DEFAULT '1234',
-    "AccountNumber" INTEGER NOT NULL,
-    "Sex" TEXT NOT NULL,
-    "Address" TEXT NOT NULL,
-    "balance" DOUBLE PRECISION NOT NULL,
+    "balance" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+    "login" TEXT NOT NULL,
     "role" TEXT NOT NULL,
     "roleId" INTEGER NOT NULL,
     "classId" INTEGER NOT NULL DEFAULT 1,
@@ -23,11 +21,11 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "UserRole" (
+CREATE TABLE "Role" (
     "id" SERIAL NOT NULL,
     "role" TEXT NOT NULL,
 
-    CONSTRAINT "UserRole_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -51,10 +49,10 @@ CREATE TABLE "Complex" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserRole_role_id_key" ON "UserRole"("role", "id");
+CREATE UNIQUE INDEX "Role_role_id_key" ON "Role"("role", "id");
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_role_roleId_fkey" FOREIGN KEY ("role", "roleId") REFERENCES "UserRole"("role", "id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_role_roleId_fkey" FOREIGN KEY ("role", "roleId") REFERENCES "Role"("role", "id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

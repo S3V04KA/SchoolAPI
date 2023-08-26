@@ -22,15 +22,14 @@ export class AuthService {
 
     const tok = await existUsers.map(async item => {
       if (await bcrypt.compare(input.password, item.password)) {
-        item.password = ''
-        const token = await this.tokenService.createToken({id: item.id, role: item.role});
+        item.password = '';
+        const token = await this.tokenService.createToken({ id: item.id, role: item.roleObj });
 
         return { token: token };
       }
     })[0];
 
-    if(tok)
-      return tok
+    if (tok) return tok;
 
     return new HttpException('Wrong Data', HttpStatus.FORBIDDEN);
   }

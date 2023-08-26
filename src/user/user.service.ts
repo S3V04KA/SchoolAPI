@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { NewUser } from 'src/graphql';
 import * as bcrypt from 'bcrypt';
 
@@ -24,12 +24,15 @@ export class UserService {
     });
   }
 
-  async usersByLogin(login: string): Promise<User[] | null> {
+  async usersByLogin(login: string): Promise<(User & { roleObj: Role })[] | null> {
     return this.prisma.user.findMany({
       where: {
         login: login,
-      }
-    })
+      },
+      include: {
+        roleObj: true,
+      },
+    });
   }
 
   async users(): Promise<User[]> {
@@ -118,7 +121,7 @@ export class UserService {
           },
         },
         balance: input.balance,
-        login: input.login
+        login: input.login,
       },
     });
   }
@@ -130,28 +133,29 @@ export class UserService {
       },
     });
 
-    if(user)
-      return user.balance;
+    if (user) return user.balance;
     return new HttpException('No User', HttpStatus.NOT_FOUND);
   }
 
-  async setBalance(id: number, newBalance:number): Promise<number | HttpException>{
+  async setBalance(id: number, newBalance: number): Promise<number | HttpException> {
     const user = await this.prisma.user.findFirst({
       where: {
         id: id,
       },
     });
 
-    if(user)
-      return (await this.prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          balance: newBalance,
-        }
-      })).balance
+    if (user)
+      return (
+        await this.prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            balance: newBalance,
+          },
+        })
+      ).balance;
 
-      return new HttpException('No User', HttpStatus.NOT_FOUND);
+    return new HttpException('No User', HttpStatus.NOT_FOUND);
   }
 }

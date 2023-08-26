@@ -80,7 +80,7 @@ export class ComplexService {
   async week(userId: number, input: NewComplex): Promise<ComplexCallback> {
     const currentWeek = await this.getBackComplex(userId, -1);
 
-    if ((await this.canEditComplex(userId)))
+    if (await this.canEditComplex(userId))
       return {
         complex: {
           ...currentWeek,
@@ -125,8 +125,8 @@ export class ComplexService {
 
     const classes = await this.prisma.class.findMany({
       where: {
-        letter: { in: ['А','Б','В'] },
-        number: { in: [10,11] }
+        letter: { in: ['А', 'Б', 'В'] },
+        number: { in: [10, 11] },
       },
       include: {
         Users: true,
@@ -146,7 +146,7 @@ export class ComplexService {
             ]);
           }),
         );
-        data.push(['', '', '', '', '', '', '', '', ''])
+        data.push(['', '', '', '', '', '', '', '', '']);
       }),
     );
 
@@ -162,8 +162,8 @@ export class ComplexService {
       where: {
         class: {
           number: { in: [11, 10] },
-          letter: { in: ['А', 'Б', 'В'] }
-        }
+          letter: { in: ['А', 'Б', 'В'] },
+        },
       },
       include: {
         complexes: true,
@@ -171,13 +171,17 @@ export class ComplexService {
     });
 
     await users.forEach(async user => {
-      this.create(user.id, {
-        fr: 0,
-        mo: 0,
-        th: 0,
-        tu: 0,
-        we: 0,
-      }, null);
+      this.create(
+        user.id,
+        {
+          fr: 0,
+          mo: 0,
+          th: 0,
+          tu: 0,
+          we: 0,
+        },
+        null,
+      );
     });
 
     return await this.getActual(-2);

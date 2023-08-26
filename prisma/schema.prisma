@@ -8,33 +8,33 @@ datasource db {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
-  name           String    @default("TestName")
-  lastName       String    @default("TestLastName")
-  patronymic     String    @default("TestPatronymic")
-  age            Int       @default(6)
-  phoneNumber    String    @default("89005555555")
-  email          String    @default("email@example.com")
-  dateOfCreation DateTime  @default(now())
-  avatarUrl      String    @default("https://cdn-icons-png.flaticon.com/512/145/145968.png")
-  userRate       Float     @default(3)
-  password       String    @default("1234")
-  balance        Float     @default(0.0)
+  id             Int      @id @default(autoincrement())
+  name           String   @default("TestName")
+  lastName       String   @default("TestLastName")
+  patronymic     String   @default("TestPatronymic")
+  age            Int      @default(6)
+  phoneNumber    String   @default("89005555555")
+  email          String   @default("email@example.com")
+  dateOfCreation DateTime @default(now())
+  avatarUrl      String   @default("https://cdn-icons-png.flaticon.com/512/145/145968.png")
+  userRate       Float    @default(3)
+  password       String   @default("1234")
+  balance        Float    @default(0.0)
   login          String
 
-  role           String
-  roleId         Int
-  roleObj        Role @relation(fields: [role, roleId], references: [role, id])
-  classId        Int       @default(1)
-  complexes      Complex[]
-  class          Class     @relation(fields: [classId], references: [id])
+  role      String
+  roleId    Int
+  roleObj   Role      @relation(fields: [role, roleId], references: [role, id])
+  classId   Int       @default(1)
+  complexes Complex[]
+  class     Class     @relation(fields: [classId], references: [id])
 }
 
 model Role {
-  id        Int @id @default(autoincrement())
-  role      String
+  id   Int    @id @default(autoincrement())
+  role String
 
-  users     User[]
+  users User[]
 
   @@unique([role, id])
 }
@@ -48,38 +48,38 @@ model Class {
 }
 
 model Complex {
-  id     Int   @id @default(autoincrement())
-  orders Int[] @default([0, 0, 0, 0, 0])
-  dateOfCreation DateTime  @default(now())
-  userId Int
-  user   User  @relation(fields: [userId], references: [id])
+  id             Int      @id @default(autoincrement())
+  orders         Int[]    @default([0, 0, 0, 0, 0])
+  dateOfCreation DateTime @default(now())
+  userId         Int
+  user           User     @relation(fields: [userId], references: [id])
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-  photoUrl String
-  categorys Category[]
-  name String
-  weight Float
-  price Float
-  isComplex Boolean
-  hiden Boolean
-  calories Int
-  fats Int
+  id            Int        @id @default(autoincrement())
+  photoUrl      String
+  categorys     Category[]
+  name          String
+  weight        Float
+  price         Float
+  isComplex     Boolean
+  hiden         Boolean
+  calories      Int
+  fats          Int
   carbohydrates Int
-  proteins Int
+  proteins      Int
 
   complexModels ComplexModel[]
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  name String
+  id       Int       @id @default(autoincrement())
+  name     String
   products Product[]
 }
 
 model ComplexModel {
-  id Int @id @default(autoincrement())
-  hide Boolean
+  id       Int       @id @default(autoincrement())
+  hide     Boolean
   products Product[]
 }
