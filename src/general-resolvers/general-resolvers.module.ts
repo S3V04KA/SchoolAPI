@@ -1,9 +1,7 @@
-import { Module } from '@nestjs/common';
-import { GeneralResolversController } from './general-resolvers.controller';
-import { ComplexModule } from 'src/complex/complex.module';
+// import { Module } from '@nestjs/common';
+// import { GeneralResolversController } from './general-resolvers.controller';
 
-@Module({
-  controllers: [GeneralResolversController],
-  imports: [ComplexModule],
-})
-export class GeneralResolversModule {}
+// @Module({
+//   controllers: [GeneralResolversController],
+// })
+// export class GeneralResolversModule {}

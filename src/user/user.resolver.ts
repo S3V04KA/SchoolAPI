@@ -1,5 +1,6 @@
 import { UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { AuthAdminGuard } from 'src/auth/auth-admin.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { SecureUser, NewUser } from 'src/graphql';
 import { UserService } from 'src/user/user.service';
@@ -8,18 +9,16 @@ import { UserService } from 'src/user/user.service';
 export class GraphQLUserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(new AuthGuard())
+  @UseGuards(new AuthAdminGuard())
   @Query('users')
-  async users(@Context('user') user) {
-    if (user.role.role === 'Admin') return await this.userService.users();
-    return new HttpException('No access', HttpStatus.FORBIDDEN);
+  async users() {
+    return await this.userService.users();
   }
 
-  @UseGuards(new AuthGuard())
+  @UseGuards(new AuthAdminGuard())
   @Query('user')
   async user(@Context('user') user, @Args('id') id: string) {
-    if (user.role.role === 'Admin') return await this.userService.user(Number(id));
-    return new HttpException('No access', HttpStatus.FORBIDDEN);
+    return await this.userService.user(Number(id));
   }
 
   @UseGuards(new AuthGuard())
@@ -35,20 +34,18 @@ export class GraphQLUserResolver {
     );
   }
 
-  @UseGuards(new AuthGuard())
+  @UseGuards(new AuthAdminGuard())
   @Mutation('changePasswordAdmin')
   async changePasswordAdmin(@Context('user') user: SecureUser, @Args('lastPass') lpass: string, @Args('newPass') npass: string, @Args('userId') userId: number) {
     console.log(user.role.role);
-    if (user.role.role === 'Admin')
-      return await this.userService.changePassword(
-        userId,
-        {
-          lastPassword: lpass,
-          newPassword: npass,
-        },
-        true,
-      );
-    return new HttpException('No Access', HttpStatus.FORBIDDEN);
+    return await this.userService.changePassword(
+      userId,
+      {
+        lastPassword: lpass,
+        newPassword: npass,
+      },
+      true,
+    );
   }
 
   @UseGuards(new AuthGuard())
@@ -58,11 +55,10 @@ export class GraphQLUserResolver {
     return await this.userService.me(Number(user.id));
   }
 
-  @UseGuards(new AuthGuard())
+  @UseGuards(new AuthAdminGuard())
   @Mutation('createUser')
   async createUser(@Context('user') user, @Args('input') args: NewUser) {
-    if (user.role.role === 'Admin') return await this.userService.createUser(args);
-    return new HttpException('No access', HttpStatus.FORBIDDEN);
+    return await this.userService.createUser(args);
   }
 
   @Query('getBalanceById')
@@ -76,10 +72,9 @@ export class GraphQLUserResolver {
     return await this.userService.getBalance(user.id);
   }
 
-  @UseGuards(new AuthGuard())
+  @UseGuards(new AuthAdminGuard())
   @Mutation('setBalance')
-  async setBalance(@Context('user') user, @Args('id') id: number, @Args('newBalance') newBalance: number) {
-    if (user.role.role !== 'Admin') return new HttpException('No access', HttpStatus.FORBIDDEN);
+  async setBalance(@Args('id') id: number, @Args('newBalance') newBalance: number) {
     return await this.userService.setBalance(id, newBalance);
   }
 }

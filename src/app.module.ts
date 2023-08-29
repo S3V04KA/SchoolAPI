@@ -6,10 +6,12 @@ import { ApolloDriverConfig } from '@nestjs/apollo/dist/interfaces';
 import { ClassModule } from './class/class.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
-import { ComplexModule } from './complex/complex.module';
 import { GraphQlModule } from './graph-ql/graph-ql.module';
 import { RolesModule } from './roles/roles.module';
-import { GeneralResolversModule } from './general-resolvers/general-resolvers.module';
+import { NewComplexModule } from './new-complex/new-complex.module';
+import { ProductModule } from './product/product.module';
+import { ComplexModelModule } from './complex-model/complex-model.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -17,16 +19,18 @@ import { GeneralResolversModule } from './general-resolvers/general-resolvers.mo
       typePaths: ['./**/*.graphql'],
       driver: ApolloDriver,
       playground: true,
-      context: ({ req, res }) => ({ headers: req.headers }),
+      context: ({ req }) => ({ headers: req.headers }),
     }),
     AuthModule,
     UserModule,
     ClassModule,
     TokenModule,
-    ComplexModule,
     GraphQlModule,
     RolesModule,
-    GeneralResolversModule,
+    NewComplexModule,
+    ProductModule,
+    ComplexModelModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

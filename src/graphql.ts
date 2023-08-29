@@ -1,3 +1,4 @@
+
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -6,6 +7,30 @@
 
 /* tslint:disable */
 /* eslint-disable */
+
+export class NewCategory {
+    name: string;
+    productIds?: Nullable<Nullable<number>[]>;
+}
+
+export class NewProduct {
+    photoUrl?: Nullable<string>;
+    categoryIds?: Nullable<Nullable<number>[]>;
+    name?: Nullable<string>;
+    weight?: Nullable<number>;
+    price?: Nullable<number>;
+    isComplex?: Nullable<boolean>;
+    hidden?: Nullable<boolean>;
+    calories?: Nullable<number>;
+    fats?: Nullable<number>;
+    carbohydrates?: Nullable<number>;
+    proteins?: Nullable<number>;
+}
+
+export class NewComplexModel {
+    hide?: Nullable<boolean>;
+    productIds?: Nullable<Nullable<number>[]>;
+}
 
 export class LoginUser {
     login: string;
@@ -35,11 +60,11 @@ export class NewClass {
 }
 
 export class NewComplex {
-    mo: number;
-    tu: number;
-    we: number;
-    th: number;
-    fr: number;
+    moId: number;
+    tuId: number;
+    weId: number;
+    thId: number;
+    frId: number;
 }
 
 export class NewRole {
@@ -81,9 +106,38 @@ export class Class {
     classRate: number;
 }
 
+export class Category {
+    id?: Nullable<number>;
+    name?: Nullable<string>;
+    products?: Nullable<Nullable<Product>[]>;
+}
+
+export class Product {
+    id?: Nullable<number>;
+    photoUrl?: Nullable<string>;
+    categorys?: Nullable<Nullable<Category>[]>;
+    name?: Nullable<string>;
+    weight?: Nullable<number>;
+    price?: Nullable<number>;
+    isComplex?: Nullable<boolean>;
+    hidden?: Nullable<boolean>;
+    calories?: Nullable<number>;
+    fats?: Nullable<number>;
+    carbohydrates?: Nullable<number>;
+    proteins?: Nullable<number>;
+    complexModels?: Nullable<Nullable<ComplexModel>[]>;
+}
+
+export class ComplexModel {
+    id?: Nullable<number>;
+    hide?: Nullable<boolean>;
+    products?: Nullable<Nullable<Product>[]>;
+    Complex?: Nullable<Complex>;
+}
+
 export class Complex {
-    id: number;
-    orders: number[];
+    id?: Nullable<number>;
+    complexModels?: Nullable<Nullable<ComplexModel>[]>;
     dateOfCreation?: Nullable<string>;
 }
 
@@ -129,6 +183,22 @@ export abstract class IQuery {
     abstract getMyBalance(): number | Promise<number>;
 
     abstract getActualComplex(): string | Promise<string>;
+
+    abstract categoryes(): Nullable<Nullable<Category>[]> | Promise<Nullable<Nullable<Category>[]>>;
+
+    abstract category(id: number): Nullable<Category> | Promise<Nullable<Category>>;
+
+    abstract product(id: number): Nullable<Product> | Promise<Nullable<Product>>;
+
+    abstract products(): Nullable<Nullable<Product>[]> | Promise<Nullable<Nullable<Product>[]>>;
+
+    abstract complexModel(id: number): Nullable<ComplexModel> | Promise<Nullable<ComplexModel>>;
+
+    abstract complexModels(): Nullable<Nullable<ComplexModel>[]> | Promise<Nullable<Nullable<ComplexModel>[]>>;
+
+    abstract complex(id: number): Nullable<Complex> | Promise<Nullable<Complex>>;
+
+    abstract complexs(): Nullable<Nullable<Complex>[]> | Promise<Nullable<Nullable<Complex>[]>>;
 }
 
 export abstract class IMutation {
@@ -140,7 +210,7 @@ export abstract class IMutation {
 
     abstract loginUser(input?: Nullable<LoginUser>): Token | Promise<Token>;
 
-    abstract createComplex(id?: Nullable<number>, input?: Nullable<NewComplex>, date?: Nullable<string>): Complex | Promise<Complex>;
+    abstract createComplex(input?: Nullable<NewComplex>, date?: Nullable<string>): Complex | Promise<Complex>;
 
     abstract createRole(input?: Nullable<NewRole>): Role | Promise<Role>;
 
@@ -151,6 +221,12 @@ export abstract class IMutation {
     abstract setBalance(id?: Nullable<number>, newBalance?: Nullable<number>): number | Promise<number>;
 
     abstract changePasswordAdmin(lastPass?: Nullable<string>, newPass?: Nullable<string>, userId?: Nullable<number>): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract createCategory(input?: Nullable<NewCategory>): Category | Promise<Category>;
+
+    abstract createProduct(input?: Nullable<NewProduct>): Nullable<Product> | Promise<Nullable<Product>>;
+
+    abstract createComplexModel(input?: Nullable<NewComplexModel>): Nullable<ComplexModel> | Promise<Nullable<ComplexModel>>;
 }
 
 type Nullable<T> = T | null;

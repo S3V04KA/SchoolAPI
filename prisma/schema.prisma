@@ -48,11 +48,11 @@ model Class {
 }
 
 model Complex {
-  id             Int      @id @default(autoincrement())
-  orders         Int[]    @default([0, 0, 0, 0, 0])
-  dateOfCreation DateTime @default(now())
+  id             Int            @id @default(autoincrement())
+  complexModels  ComplexModel[]
+  dateOfCreation DateTime       @default(now())
   userId         Int
-  user           User     @relation(fields: [userId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
 }
 
 model Product {
@@ -63,7 +63,7 @@ model Product {
   weight        Float
   price         Float
   isComplex     Boolean
-  hiden         Boolean
+  hidden        Boolean
   calories      Int
   fats          Int
   carbohydrates Int
@@ -79,7 +79,8 @@ model Category {
 }
 
 model ComplexModel {
-  id       Int       @id @default(autoincrement())
-  hide     Boolean
-  products Product[]
+  id        Int       @id @default(autoincrement())
+  hide      Boolean
+  products  Product[]
+  complexs   Complex[]
 }

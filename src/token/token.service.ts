@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as jwt from 'jsonwebtoken';
-import { User } from '@prisma/client';
 import { SecureUser } from 'src/graphql';
 
 @Injectable()

@@ -33,9 +33,62 @@ type Class {
   classRate: Float!
 }
 
+type Category {
+  id: Int
+  name: String
+  products: [Product]
+}
+
+input NewCategory {
+  name: String!
+  productIds: [Int]
+}
+
+type Product {
+  id: Int
+  photoUrl: String
+  categorys: [Category]
+  name: String
+  weight: Float
+  price: Float
+  isComplex: Boolean
+  hidden: Boolean
+  calories: Int
+  fats: Int
+  carbohydrates: Int
+  proteins: Int
+  complexModels: [ComplexModel]
+}
+
+input NewProduct {
+  photoUrl: String
+  categoryIds: [Int]
+  name: String
+  weight: Float
+  price: Float
+  isComplex: Boolean
+  hidden: Boolean
+  calories: Int
+  fats: Int
+  carbohydrates: Int
+  proteins: Int
+}
+
+input NewComplexModel {
+  hide: Boolean
+  productIds: [Int]
+}
+
+type ComplexModel {
+  id: Int
+  hide: Boolean
+  products: [Product]
+  Complex: Complex
+}
+
 type Complex {
-  id: Int!
-  orders: [Int!]!
+  id: Int
+  complexModels: [ComplexModel]
   dateOfCreation: String
 }
 
@@ -80,11 +133,11 @@ input NewClass {
 }
 
 input NewComplex {
-  mo: Int!
-  tu: Int!
-  we: Int!
-  th: Int!
-  fr: Int!
+  moId: Int!
+  tuId: Int!
+  weId: Int!
+  thId: Int!
+  frId: Int!
 }
 
 input NewRole {
@@ -115,6 +168,18 @@ type Query {
   getBalanceById(id: Int): Float!
   getMyBalance: Float!
   getActualComplex: String!
+
+  categoryes: [Category]
+  category(id: Int!): Category
+
+  product(id: Int!): Product
+  products: [Product]
+
+  complexModel(id: Int!): ComplexModel
+  complexModels: [ComplexModel]
+
+  complex(id: Int!): Complex
+  complexs: [Complex]
 }
 
 type Mutation {
@@ -122,10 +187,13 @@ type Mutation {
   createClass(input: NewClass): Class!
   registerUser(input: NewUser): User!
   loginUser(input: LoginUser): Token!
-  createComplex(id: Int, input: NewComplex, date: String): Complex!
+  createComplex(input: NewComplex, date: String): Complex!
   createRole(input: NewRole): Role!
   changePassword(lastPass: String, newPass: String): String
   changeComplex(input: NewComplex): ComplexCallback!
   setBalance(id: Int, newBalance: Float): Float!
   changePasswordAdmin(lastPass: String, newPass: String, userId: Int): String
+  createCategory(input: NewCategory): Category!
+  createProduct(input: NewProduct): Product
+  createComplexModel(input: NewComplexModel): ComplexModel
 }

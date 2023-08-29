@@ -50,7 +50,7 @@ export class UserService {
     });
   }
 
-  async changePassword(id: number, input: { lastPassword: string; newPassword }, isAdmin: boolean): Promise<any> {
+  async changePassword(id: number, input: { lastPassword: string; newPassword }, isAdmin: boolean): Promise<string | HttpException> {
     const user = await this.me(id);
 
     if (!user) return new HttpException('No User', HttpStatus.NOT_FOUND);
